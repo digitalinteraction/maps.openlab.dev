@@ -1,11 +1,5 @@
 {
 	"type": "module",
-	"scripts": {
-		"dev": "node --experimental-strip-types --env-file=.env cli/main.ts",
-		"debug": "node --experimental-strip-types --env-file=.env --inspect-wait cli/main.ts",
-		"start": "npx eleventy",
-		"build": "tsc"
-	},
 	"workspaces": [
 		"cli",
 		"website"

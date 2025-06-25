@@ -35,10 +35,21 @@ class BuildsInfo extends HTMLElement {
 			return;
 		}
 
+		const tileAnchor = (name) => {
+			return `<a href="/tiles/${name}" download="${name}.json">${name}</a>`;
+		};
+
+		const metaAnchor = (pmtiles) => {
+			const name = pmtiles.replace(/\.pmtiles$/, "");
+			return `<a href="/tiles/${name}.json" download="${name}.json">metadata</a>`;
+		};
+
 		const builds = data.targets.map(
 			(target) =>
 				`<li>
-					<a href="/tiles/${target.name}" download=${target.name}>${target.name}</a>
+					${tileAnchor(target.name)}
+					&ndash;
+					${metaAnchor(target.name)}
 					<br>
 					boundary=${target.bbox.join(",")}
 				</li>`,
