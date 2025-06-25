@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150px" height="150px" viewBox="0 0 150 150" version="1.1"
+	xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>Logomark / Light</title>
+	<g id="Logomark-/-Light" stroke="none" fill="none">
+		<path d="M150,0 L150,105 L105,105 L105,45 C65,45 45,45 45,45 C45,45 45,30 45,0 L150,0 Z"
+			id="Path" fill="#CCCCCC" fill-rule="nonzero"></path>
+		<polygon id="Path" fill="#000000" fill-rule="nonzero"
+			points="150 105 105 150 0 150 0 45 45 0 45 105"></polygon>
+	</g>
+</svg>

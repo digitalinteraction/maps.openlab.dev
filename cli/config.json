@@ -1,0 +1,13 @@
+{
+	"targets": [
+		{
+			"name": "ncl.pmtiles",
+			"bbox": [-2.072468, 54.730692, -1.112537, 55.248329]
+		}
+	],
+	"s3": {
+		"objectMetadata": {
+			"x-amz-acl": "public-read"
+		}
+	}
+}

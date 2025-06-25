@@ -1,0 +1,30 @@
+:root {
+	--font-main: "Rubik var", Rubik, Inter, system-ui, sans-serif;
+}
+html {
+	scroll-behavior: smooth;
+}
+builds-info {
+	display: block;
+}
+
+/* TODO: labcoat candidate */
+body > header nav a {
+	font-size: 1.1rem;
+	font-weight: 400;
+}
+.brand {
+	text-decoration: none;
+}
+.brand:hover {
+	text-decoration: underline;
+}
+.brand picture,
+.brand img {
+	height: 1.125em;
+	height: 1.5cap;
+	width: 1.125em;
+	width: 1.5cap;
+	display: inline;
+}
+/* end labcoat candidates */

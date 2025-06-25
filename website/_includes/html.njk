@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{{ site.title }}</title>
+		<!-- @openlab/alembic inject-css -->
+		<link rel="stylesheet" href="/assets/style.css" />
+		<link rel="stylesheet" href="https://fonts.openlab.dev/rubik/rubik.css" />
+	</head>
+	<body>
+		<header>
+			<cluster-layout justify="space-between" align="center">
+				<a href="/" class="brand">
+					<cluster-layout space="s-2" align="center">
+						<picture>
+							<source
+								srcset="/assets/logo-dark.svg"
+								media="(prefers-color-scheme: dark)"
+							/>
+							<img
+								src="/assets/logo-light.svg"
+								alt="Open Lab Logo"
+								width="42"
+								height="42"
+							/>
+						</picture>
+						<span> maps </span>
+					</cluster-layout>
+				</a>
+				<nav>
+					<cluster-layout space="s0">
+						<a href="#about">About</a>
+						<a href="#install">Install</a>
+						<a href="#cli">CLI</a>
+					</cluster-layout>
+				</nav>
+			</cluster-layout>
+		</header>
+		<main>
+			<center-layout>
+				<div class="flow">
+					{{ content | safe }}
+				</div>
+			</center-layout>
+		</main>
+		<footer>
+			<p>
+				<a href="https://github.com/digitalinteraction/maps.openlab.dev"
+					>Open Source</a
+				>
+				&mdash; made by
+				<a href="https://www.r0b.io">Rob</a>
+			</p>
+		</footer>
+		<!-- @openlab/alembic inject-js -->
+		<script type="module" src="/assets/app.js"></script>
+	</body>
+</html>

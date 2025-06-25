@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150px" height="150px" viewBox="0 0 150 150" version="1.1"
+	xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>Logomark / Dark</title>
+	<g id="Logomark-/-Dark" stroke="none" fill="none" fill-rule="nonzero">
+		<path d="M150,0 L150,105 L105,105 L105,45 C65,45 45,45 45,45 C45,45 45,30 45,0 L150,0 Z"
+			id="Path" fill="#BBBBBB"></path>
+		<polygon id="Path" fill="#FFFFFF" points="150 105 105 150 0 150 0 45 45 0 45 105"></polygon>
+	</g>
+</svg>

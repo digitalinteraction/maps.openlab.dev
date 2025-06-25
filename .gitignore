@@ -1,0 +1,11 @@
+#
+# Files to ignore from git source control
+#
+
+.DS_Store
+*.env
+node_modules
+coverage
+dist
+tiles
+_site

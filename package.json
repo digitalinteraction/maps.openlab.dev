@@ -1,0 +1,20 @@
+{
+	"type": "module",
+	"scripts": {
+		"dev": "node --experimental-strip-types --env-file=.env cli/main.ts",
+		"debug": "node --experimental-strip-types --env-file=.env --inspect-wait cli/main.ts",
+		"start": "npx eleventy",
+		"build": "tsc"
+	},
+	"workspaces": [
+		"cli",
+		"website"
+	],
+	"devDependencies": {
+		"@types/node": "^24.0.3",
+		"@types/turndown": "^5.0.5",
+		"prettier": "^3.5.3",
+		"typescript": "^5.8.3"
+	},
+	"prettier": {}
+}
