@@ -21,8 +21,8 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true,
 		"forceConsistentCasingInFileNames": true,
-		"erasableSyntaxOnly": true,
-		"verbatimModuleSyntax": true
+		"erasableSyntaxOnly": true
+		// "verbatimModuleSyntax": true
 	},
 	"include": ["cli"],
 	"exclude": ["node_modules"]
