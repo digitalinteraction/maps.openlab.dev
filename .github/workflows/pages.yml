@@ -28,10 +28,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           cache: "npm"
-          cache-dependency-path: "website/package-lock.json"
 
       - run: npm ci
-        working-directory: ./website
 
       - name: Build website
         run: npx eleventy # --pathprefix=/maps.openlab.dev/
