@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 import { appConfig } from "./config.ts";
 import * as Minio from "minio";
 import { exec } from "./lib.ts";
@@ -62,7 +63,7 @@ export async function runTool(options: RunOptions) {
 		// Work out where to put the build locally & see if it already exists
 		const local = new URL(`../tiles/${target.name}`, import.meta.url);
 		let stat = await fs.promises.stat(local).catch(() => null);
-		console.log("local=%o", stat?.isFile() ?? false);
+		console.log("local=%o ", stat?.isFile() ?? false);
 
 		// If it doesn't exist, use the pmtiles CLI to extract and download it
 		if (!stat?.isFile()) {
@@ -70,14 +71,14 @@ export async function runTool(options: RunOptions) {
 				"pmtiles",
 				"extract",
 				url.toString(),
-				local,
+				fileURLToPath(local),
 				"--bbox=" + target.bbox.join(","),
 			].join(" ");
 
 			if (options.dryRun) {
 				console.log("dry-run:\n  ", command);
 			} else {
-				console.log("downloading file");
+				console.log("downloading file=%o", fileURLToPath(local));
 				await exec(command);
 			}
 		}
@@ -96,16 +97,24 @@ export async function runTool(options: RunOptions) {
 		if (options.dryRun) {
 			console.log("dry-run: upload to s3 object=%o", tilesName);
 		} else {
-			console.log("upload", tilesName);
+			const metadata = {
+				...appConfig.s3.objectMetadata,
+				"content-type": "application/vnd.pmtiles",
+			};
+
+			console.log(
+				"upload name=%o chunk=%o metadata=%O",
+				tilesName,
+				s3.calculatePartSize(stat!.size),
+				metadata,
+			);
+
 			await s3.putObject(
 				appConfig.s3.bucketName,
 				tilesName,
 				stream,
 				stat!.size,
-				{
-					...appConfig.s3.objectMetadata,
-					"content-type": "application/vnd.pmtiles",
-				},
+				metadata,
 			);
 		}
 

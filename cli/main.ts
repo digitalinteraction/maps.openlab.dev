@@ -7,12 +7,13 @@ import process from "node:process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
-import { outputConfiguration } from "./config.ts";
+import { appConfig, outputConfiguration } from "./config.ts";
 import { runTool } from "./run.ts";
 
 const cli = yargs()
 	.demandCommand(1, "A command is required")
 	.recommendCommands()
+	.version(appConfig.meta.version)
 	.help();
 
 cli.command(

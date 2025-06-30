@@ -1,6 +1,8 @@
 import { getConfiguration, Structure } from "gruber";
 import pkg from "./package.json" with { type: "json" };
+import { loadEnvFile } from "./lib.ts";
 
+loadEnvFile();
 const config = getConfiguration();
 
 const UNSET = "gruber://unset";
