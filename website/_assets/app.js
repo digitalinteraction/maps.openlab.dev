@@ -20,12 +20,19 @@ class BuildsInfo extends HTMLElement {
 	get fake() {
 		return this.hasAttribute("fake");
 	}
+	get url() {
+		return this.getAttribute("url") ?? location.origin;
+	}
 
 	async getMetadata() {
 		if (this.fake) return BuildsInfo.fakeInfo;
 
-		const res = await fetch(this.endpoint);
+		const res = await fetch(this.getUrl(this.endpoint));
 		return res.ok ? res.json() : null;
+	}
+
+	getUrl(input) {
+		return new URL(input, this.url).toString();
 	}
 
 	async render() {
@@ -36,12 +43,12 @@ class BuildsInfo extends HTMLElement {
 		}
 
 		const tileAnchor = (name) => {
-			return `<a href="/tiles/${name}" download="${name}.json">${name}</a>`;
+			return `<a href="${this.getUrl(name)}" download="${name}">${name}</a>`;
 		};
 
 		const metaAnchor = (pmtiles) => {
 			const name = pmtiles.replace(/\.pmtiles$/, "");
-			return `<a href="/tiles/${name}.json" download="${name}.json">metadata</a>`;
+			return `<a href="${this.getUrl(name)}.json" download="${name}.json">metadata</a>`;
 		};
 
 		const builds = data.targets.map(
@@ -55,10 +62,25 @@ class BuildsInfo extends HTMLElement {
 				</li>`,
 		);
 
-		const debug = [
-			`endpoint: ${this.endpoint}`,
-			`version: ${data.meta.name}/${data.meta.version}`,
-		];
+		// const debug = [
+		// 	`endpoint: ${this.endpoint}`,
+		// 	`version: ${data.meta.name}/${data.meta.version}`,
+		// ];
+
+		const debug = {
+			element: {
+				endpoint: this.endpoint,
+				url: this.url,
+				fake: this.fake,
+			},
+			data,
+		};
+
+		const format = new Intl.DateTimeFormat(undefined, {
+			dateStyle: "medium",
+			timeStyle: "medium",
+		});
+		const updated = format.format(new Date(data.date));
 
 		this.classList.add("flow");
 
@@ -66,9 +88,12 @@ class BuildsInfo extends HTMLElement {
 			<ul>
 				${builds.join("\n")}
 			</ul>
+			<p>
+				Last updated: ${updated}
+			</p>
 			<details>
 				<summary>debug</summary>
-				<pre>${debug.join("\n")}</pre>
+				<pre>${JSON.stringify(debug, null, 2)}</pre>
 			</details>
 		`;
 	}
