@@ -7,6 +7,8 @@ layout: html.njk
 This website hosts protomap tiles (pmtiles) for use accress Open Lab projects.
 There is a brief description of the format and a guide for using them.
 
+<example-map></example-map>
+
 ## about
 
 This site contains information about using Open Lab's [PMTiles](https://github.com/protomaps/PMTiles) in your app's maps.

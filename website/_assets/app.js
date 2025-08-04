@@ -1,3 +1,7 @@
+import * as pmtiles from "https://esm.run/pmtiles@4.3.0";
+import maplibre from "https://esm.run/maplibre-gl@5.6.1";
+import { layers, namedFlavor } from "https://esm.run/@protomaps/basemaps@5.5.1";
+
 class BuildsInfo extends HTMLElement {
 	static get observedAttributes() {
 		return ["endpoint", "fake"];
@@ -62,11 +66,6 @@ class BuildsInfo extends HTMLElement {
 				</li>`,
 		);
 
-		// const debug = [
-		// 	`endpoint: ${this.endpoint}`,
-		// 	`version: ${data.meta.name}/${data.meta.version}`,
-		// ];
-
 		const debug = {
 			element: {
 				endpoint: this.endpoint,
@@ -107,4 +106,70 @@ class BuildsInfo extends HTMLElement {
 	}
 }
 
+class ExampleMap extends HTMLElement {
+	get source() {
+		return (
+			this.getAttribute("source") ??
+			"pmtiles://https://maps.openlab.dev/tiles/uk.pmtiles"
+		);
+	}
+
+	get mapStyle() {
+		return {
+			version: 8,
+			glyphs:
+				"https://protomaps.github.io/basemaps-assets/fonts/{fontstack}/{range}.pbf",
+			sources: {
+				protomaps: {
+					type: "vector",
+					url: this.source,
+				},
+			},
+			layers: layers("protomaps", namedFlavor("light"), { lang: "en" }),
+		};
+	}
+
+	render() {
+		const source = this.source;
+		if (!source) throw new TypeError("<example-map> source not set");
+
+		if (!this.innerHTML) {
+			this.innerHTML = `
+				<frame-layout ratio="16:9">
+					<div id="example_map"></div>
+				</frame-layout>
+				<p class="mapAttribution">
+					Attribution:
+						<a href="https://maplibre.org/">MapLibre</a>,
+						<a href="https://docs.protomaps.com/pmtiles/">PMTiles</a>
+						&amp;
+						<a href="https://www.openstreetmap.org/about">OpenStreetMap</a>
+				</p>
+			`;
+		}
+		if (!this.map) {
+			this.map = new maplibre.Map({
+				container: "example_map",
+				style: this.mapStyle,
+				center: [-1.615008, 54.971191],
+				zoom: 13,
+				attributionControl: false,
+			});
+			this.map.once("styledata", () => this.render());
+		}
+	}
+
+	connectedCallback() {
+		this.render();
+	}
+
+	attributeChangedCallback() {
+		this.render();
+	}
+}
+
+const protocol = new pmtiles.Protocol();
+maplibre.addProtocol("pmtiles", protocol.tile);
+
 window.customElements.define("builds-info", BuildsInfo);
+window.customElements.define("example-map", ExampleMap);
