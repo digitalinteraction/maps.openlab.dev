@@ -21,7 +21,7 @@ RUN wget -O- https://github.com/protomaps/go-pmtiles/releases/download/v1.28.0/g
 # [2] From the base again, install production dependencies and copy compiled code
 FROM base AS dist
 ENV NODE_ENV=production
-RUN npm ci -w cli && npm cache clean --force
+RUN npm ci -w cli && npm cache clean --force && mkdir /app/tiles
 COPY --from=builder --chown=node ["/app/cli/dist/", "/app/cli/"]
 COPY --from=builder --chown=node ["/tmp/pmtiles", "/usr/local/bin/pmtiles"]
 WORKDIR /app

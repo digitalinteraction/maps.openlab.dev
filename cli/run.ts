@@ -54,7 +54,7 @@ export async function runTool(options: RunOptions) {
 	for (const [index, target] of appConfig.targets.entries()) {
 		console.log(
 			"[%d/%d] target=%o boundary=%o",
-			index,
+			index + 1,
 			appConfig.targets.length,
 			target.name,
 			target.bbox.join(","),
@@ -144,7 +144,7 @@ export async function runTool(options: RunOptions) {
 			);
 		}
 
-		console.log("[%d/%d] done\n", index, appConfig.targets.length);
+		console.log("[%d/%d] done\n", index + 1, appConfig.targets.length);
 	}
 
 	// generate global metadata
