@@ -26,4 +26,4 @@ COPY --from=builder --chown=node ["/app/cli/dist/", "/app/cli/"]
 COPY --from=builder --chown=node ["/tmp/pmtiles", "/usr/local/bin/pmtiles"]
 WORKDIR /app
 ENTRYPOINT ["node", "cli/main.js"]
-CMD ["serve"]
+CMD ["run"]

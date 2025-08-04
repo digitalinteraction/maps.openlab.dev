@@ -44,5 +44,6 @@ jobs:
         with:
           file: cli/Dockerfile
           push: true
+          platforms: linux/arm64,linux/amd64
           tags: ${{ steps.cli_meta.outputs.tags }}
           labels: ${{ steps.cli_meta.outputs.labels }}
