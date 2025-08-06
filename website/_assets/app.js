@@ -46,6 +46,12 @@ class BuildsInfo extends HTMLElement {
 			return;
 		}
 
+		this.dispatchEvent(
+			new CustomEvent("data", {
+				detail: { data },
+			}),
+		);
+
 		const tileAnchor = (name) => {
 			return `<a href="${this.getUrl(name)}" download="${name}">${name}</a>`;
 		};
@@ -135,7 +141,7 @@ class ExampleMap extends HTMLElement {
 
 		if (!this.innerHTML) {
 			this.innerHTML = `
-				<frame-layout ratio="16:9">
+				<frame-layout ratio="4:3">
 					<div id="example_map"></div>
 				</frame-layout>
 				<p class="mapAttribution">
@@ -151,11 +157,18 @@ class ExampleMap extends HTMLElement {
 			this.map = new maplibre.Map({
 				container: "example_map",
 				style: this.mapStyle,
-				center: [-1.615008, 54.971191],
-				zoom: 13,
+				center: [-4, 56],
+				zoom: 4,
 				attributionControl: false,
 			});
-			this.map.once("styledata", () => this.render());
+			this.map.once("styledata", () => {
+				this.render();
+				this.dispatchEvent(
+					new CustomEvent("map", {
+						detail: { map: this.map },
+					}),
+				);
+			});
 		}
 	}
 
@@ -173,3 +186,88 @@ maplibre.addProtocol("pmtiles", protocol.tile);
 
 window.customElements.define("builds-info", BuildsInfo);
 window.customElements.define("example-map", ExampleMap);
+
+let map = null;
+let data = null;
+
+document.querySelector("example-map")?.addEventListener("map", (event) => {
+	map = event.detail.map;
+	updateMap();
+});
+
+document.querySelector("builds-info")?.addEventListener("data", (event) => {
+	data = event.detail.data;
+	updateMap();
+});
+
+const colours = ["#0371A6", "#D7461A"];
+
+function updateMap() {
+	if (!data || !map) return;
+
+	let source = map.getSource("targets");
+	if (!source) {
+		map.addSource("targets", {
+			type: "geojson",
+			data: { type: "FeatureCollection", features: [] },
+		});
+		source = map.getSource("targets");
+	}
+
+	const features = data.targets.map((t, i) => ({
+		type: "Feature",
+		properties: {
+			target_color: colours[i % colours.length],
+			target_name: t.name,
+		},
+		geometry: {
+			type: "Polygon",
+			coordinates: [
+				[
+					[t.bbox[0], t.bbox[1]],
+					[t.bbox[0], t.bbox[3]],
+					[t.bbox[2], t.bbox[3]],
+					[t.bbox[2], t.bbox[1]],
+					[t.bbox[0], t.bbox[1]],
+				],
+			],
+		},
+	}));
+
+	source.setData({
+		type: "FeatureCollection",
+		features,
+	});
+
+	if (!map.getLayer("targets_outline")) {
+		map.addLayer({
+			id: "targets_outline",
+			type: "line",
+			source: "targets",
+			paint: {
+				"line-width": 2,
+				"line-color": ["get", "target_color"],
+			},
+		});
+	}
+
+	// NOTE: this doesn't work, but I'd like it to show the name in the bottom-right of the rectangle
+	// if (!map.getLayer("targets_label")) {
+	// 	map.addLayer({
+	// 		id: "targets_label",
+	// 		type: "symbol",
+	// 		source: "targets",
+	// 		paint: {
+	// 			"text-color": ["get", "target_color"],
+	// 		},
+	// 		layout: {
+	// 			"text-field": ["get", "target_name"],
+	// 			"text-anchor": "bottom-right",
+	// 			"text-font": ["Noto Sans Regular"],
+	// 			"text-offset": [0, -1],
+	// 			"text-size": 14,
+	// 			// 'text-color': 'red'
+	// 		},
+	// 	});
+	// }
+}
